@@ -1,0 +1,113 @@
+javascript
+// Basic Phaser 3 setup
+const config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    scene: [Scene1, Scene2, Scene3, Scene4, Scene5],
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: false
+        }
+    }
+};
+
+const game = new Phaser.Game(config);
+
+class BaseScene extends Phaser.Scene {
+    constructor(key) {
+        super(key);
+    }
+
+    create() {
+        this.input.keyboard.on('keydown-SPACE', () => {
+            this.fadeOut();
+        });
+    }
+
+    fadeOut() {
+        this.cameras.main.fade(500);
+        this.cameras.main.on('camerafadeoutcomplete', () => {
+            this.scene.start(this.getNextScene());
+        });
+    }
+
+    getNextScene() {
+        return 'Scene' + ((parseInt(this.scene.key.slice(-1)) % 5) + 1);
+    }
+}
+
+class Scene1 extends BaseScene {
+    constructor() {
+        super('Scene1');
+    }
+
+    create() {
+        super.create();
+        this.add.text(100, 100, 'Scene 1: The Mage Awakens', { fontSize: '32px', fill: '#fff' });
+        this.add.text(100, 150, 'An unknown voice speaks to him...', { fontSize: '24px', fill: '#fff' });
+    }
+}
+
+class Scene2 extends BaseScene {
+    constructor() {
+        super('Scene2');
+    }
+
+    create() {
+        super.create();
+        this.add.text(100, 100, 'Scene 2: The Quest for Weapons', { fontSize: '32px', fill: '#fff' });
+        this.add.text(100, 150, 'The mage must complete a trial to find his weapons.', { fontSize: '24px', fill: '#fff' });
+    }
+}
+
+class Scene3 extends BaseScene {
+    constructor() {
+        super('Scene3');
+    }
+
+    create() {
+        super.create();
+        this.add.text(100, 100, 'Scene 3: The Search for the Scroll', { fontSize: '32px', fill: '#fff' });
+        this.add.text(100, 150, 'The mage needs to find a scroll to regain his powers.', { fontSize: '24px', fill: '#fff' });
+    }
+}
+
+class Scene4 extends BaseScene {
+    constructor() {
+        super('Scene4');
+    }
+
+    create() {
+        super.create();
+        this.add.text(100, 100, 'Scene 4: The Boss Battle', { fontSize: '32px', fill: '#fff' });
+        this.add.text(100, 150, 'A fierce battle against a dark enemy awaits!', { fontSize: '24px', fill: '#fff' });
+    }
+}
+
+class Scene5 extends BaseScene {
+    constructor() {
+        super('Scene5');
+    }
+
+    create() {
+        super.create();
+        this.add.text(100, 100, 'Scene 5: The Land in Turmoil', { fontSize: '32px', fill: '#fff' });
+        this.add.text(100, 150, 'The mage finds himself in a land that needs his help!', { fontSize: '24px', fill: '#fff' });
+    }
+}
+
+// Preload assets if you want to add images in future
+function preloadAssets(scene) {
+    // Example: scene.load.image('mage', 'path/to/mage.png');
+}
+
+// Optionally preload assets for each scene
+const scenesArray = [Scene1, Scene2, Scene3, Scene4, Scene5];
+for (let i = 0; i < scenesArray.length; i++) {
+    scenesArray[i].preload = function() {
+        preloadAssets(this);
+    };
+}
