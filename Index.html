@@ -1,0 +1,102 @@
+// Basic Phaser 3 setup
+const config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    scene: [Scene1, Scene2, Scene3, Scene4, Scene5],
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: false
+        }
+    }
+};
+
+const game = new Phaser.Game(config);
+
+class BaseScene extends Phaser.Scene {
+    constructor(key) {
+        super(key);
+    }
+
+    create() {
+        this.input.keyboard.on('keydown-SPACE', () => {
+            this.fadeOut();
+        });
+    }
+
+    fadeOut() {
+        this.cameras.main.fade(500);
+        this.cameras.main.on('camerafadeoutcomplete', () => {
+            this.scene.start(this.getNextScene());
+        });
+    }
+
+    getNextScene() {
+        return 'Scene' + ((parseInt(this.scene.key.slice(-1)) % 5) + 1);
+    }
+}
+
+class Scene1 extends BaseScene {
+    constructor() {
+        super('Scene1');
+    }
+
+    create() {
+        super.create();
+        this.add.text(100, 100, 'Scene 1: The Mage Prepares', { fontSize: '32px', fill: '#fff' });
+        // Add mage visual placeholder
+        // this.add.image(400, 300, 'mageImage'); // Add mage image here
+    }
+}
+
+class Scene2 extends BaseScene {
+    constructor() {
+        super('Scene2');
+    }
+
+    create() {
+        super.create();
+        this.add.text(100, 100, 'Scene 2: First Encounter with Monsters', { fontSize: '32px', fill: '#fff' });
+        // Add monster visual placeholder
+        // this.add.image(400, 300, 'monsterImage'); // Add monster image here
+    }
+}
+
+class Scene3 extends BaseScene {
+    constructor() {
+        super('Scene3');
+    }
+
+    create() {
+        super.create();
+        this.add.text(100, 100, 'Scene 3: Casting Spells', { fontSize: '32px', fill: '#fff' });
+        // Add spell visuals here
+    }
+}
+
+class Scene4 extends BaseScene {
+    constructor() {
+        super('Scene4');
+    }
+
+    create() {
+        super.create();
+        this.add.text(100, 100, 'Scene 4: Battle with a Dragon', { fontSize: '32px', fill: '#fff' });
+        // Add dragon visual placeholder
+        // this.add.image(400, 300, 'dragonImage'); // Add dragon image here
+    }
+}
+
+class Scene5 extends BaseScene {
+    constructor() {
+        super('Scene5');
+    }
+
+    create() {
+        super.create();
+        this.add.text(100, 100, 'Scene 5: Victory and Level Up!', { fontSize: '32px', fill: '#fff' });
+        // Add victory visual placeholder
+    }
+}
