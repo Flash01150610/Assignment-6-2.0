@@ -1,10 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phaser Scene Transition</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.js"></script>
+    <script src="game.js"></script>
+</head>
+<body>
+</body>
+</html>
 javascript
-// Basic Phaser 3 setup
 const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
-    scene: [Scene1, Scene2, Scene3, Scene4, Scene5],
+    scene: [Scene1, Scene2, Scene3, Scene4],
     physics: {
         default: 'arcade',
         arcade: {
@@ -13,101 +22,95 @@ const config = {
         }
     }
 };
-
 const game = new Phaser.Game(config);
+class Scene1 extends Phaser.Scene {
+    constructor() {
+        super({ key: 'Scene1' });
+    }
 
-class BaseScene extends Phaser.Scene {
-    constructor(key) {
-        super(key);
+    preload() {
+        // Load assets if necessary
     }
 
     create() {
-        this.input.keyboard.on('keydown-SPACE', () => {
-            this.fadeOut();
+        this.add.text(100, 100, 'Mage Scene', { fontSize: '48px', fill: '#ffffff' });
+        this.input.keyboard.on('keydown_SPACE', this.fadeOutAndSwitch, this);
+    }
+
+    fadeOutAndSwitch() {
+        const tween = this.tweens.add({
+            targets: this.cameras.main,
+            alpha: 0,
+            duration: 1000,
+            onComplete: () => {
+                this.scene.start('Scene2');
+            }
         });
     }
+}
 
-    fadeOut() {
-        this.cameras.main.fade(500);
-        this.cameras.main.on('camerafadeoutcomplete', () => {
-            this.scene.start(this.getNextScene());
+class Scene2 extends Phaser.Scene {
+    constructor() {
+        super({ key: 'Scene2' });
+    }
+
+    create() {
+        this.add.text(100, 100, 'Dragon Scene', { fontSize: '48px', fill: '#ffffff' });
+        this.input.keyboard.on('keydown_SPACE', this.fadeOutAndSwitch, this);
+    }
+
+    fadeOutAndSwitch() {
+        const tween = this.tweens.add({
+            targets: this.cameras.main,
+            alpha: 0,
+            duration: 1000,
+            onComplete: () => {
+                this.scene.start('Scene3');
+            }
         });
     }
-
-    getNextScene() {
-        return 'Scene' + ((parseInt(this.scene.key.slice(-1)) % 5) + 1);
-    }
 }
 
-class Scene1 extends BaseScene {
+class Scene3 extends Phaser.Scene {
     constructor() {
-        super('Scene1');
+        super({ key: 'Scene3' });
     }
 
     create() {
-        super.create();
-        this.add.text(100, 100, 'Scene 1: The Mage Awakens', { fontSize: '32px', fill: '#fff' });
-        this.add.text(100, 150, 'An unknown voice speaks to him...', { fontSize: '24px', fill: '#fff' });
+        this.add.text(100, 100, 'Trees Scene', { fontSize: '48px', fill: '#ffffff' });
+        this.input.keyboard.on('keydown_SPACE', this.fadeOutAndSwitch, this);
+    }
+
+    fadeOutAndSwitch() {
+        const tween = this.tweens.add({
+            targets: this.cameras.main,
+            alpha: 0,
+            duration: 1000,
+            onComplete: () => {
+                this.scene.start('Scene4');
+            }
+        });
     }
 }
 
-class Scene2 extends BaseScene {
+class Scene4 extends Phaser.Scene {
     constructor() {
-        super('Scene2');
+        super({ key: 'Scene4' });
     }
 
     create() {
-        super.create();
-        this.add.text(100, 100, 'Scene 2: The Quest for Weapons', { fontSize: '32px', fill: '#fff' });
-        this.add.text(100, 150, 'The mage must complete a trial to find his weapons.', { fontSize: '24px', fill: '#fff' });
-    }
-}
-
-class Scene3 extends BaseScene {
-    constructor() {
-        super('Scene3');
+        this.add.text(100, 100, 'Ocean Scene', { fontSize: '48px', fill: '#ffffff' });
+        this.input.keyboard.on('keydown_SPACE', this.fadeOutAndSwitch, this);
     }
 
-    create() {
-        super.create();
-        this.add.text(100, 100, 'Scene 3: The Search for the Scroll', { fontSize: '32px', fill: '#fff' });
-        this.add.text(100, 150, 'The mage needs to find a scroll to regain his powers.', { fontSize: '24px', fill: '#fff' });
+    fadeOutAndSwitch() {
+        const tween = this.tweens.add({
+            targets: this.cameras.main,
+            alpha: 0,
+            duration: 1000,
+            onComplete: () => {
+                this.scene.start('Scene1');
+            }
+        });
     }
-}
-
-class Scene4 extends BaseScene {
-    constructor() {
-        super('Scene4');
-    }
-
-    create() {
-        super.create();
-        this.add.text(100, 100, 'Scene 4: The Boss Battle', { fontSize: '32px', fill: '#fff' });
-        this.add.text(100, 150, 'A fierce battle against a dark enemy awaits!', { fontSize: '24px', fill: '#fff' });
-    }
-}
-
-class Scene5 extends BaseScene {
-    constructor() {
-        super('Scene5');
-    }
-
-    create() {
-        super.create();
-        this.add.text(100, 100, 'Scene 5: The Land in Turmoil', { fontSize: '32px', fill: '#fff' });
-        this.add.text(100, 150, 'The mage finds himself in a land that needs his help!', { fontSize: '24px', fill: '#fff' });
-    }
-}
-
-// Preload assets if you want to add images in future
-function preloadAssets(scene) {
-    // Example: scene.load.image('mage', 'path/to/mage.png');
-}
-
-// Optionally preload assets for each scene
-const scenesArray = [Scene1, Scene2, Scene3, Scene4, Scene5];
-for (let i = 0; i < scenesArray.length; i++) {
-    scenesArray[i].preload = function() {
-        preloadAssets(this);
-    };
 }
